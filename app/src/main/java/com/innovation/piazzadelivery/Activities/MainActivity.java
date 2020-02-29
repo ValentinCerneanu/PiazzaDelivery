@@ -11,6 +11,7 @@ import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListView;
@@ -24,13 +25,24 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.gson.Gson;
+import com.innovation.piazzadelivery.Adapters.OrderAdapter;
+import com.innovation.piazzadelivery.Domain.Order;
 import com.innovation.piazzadelivery.R;
 import com.innovation.piazzadelivery.Services.LocationService;
 
+import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.Iterator;
 
 public class MainActivity extends AppCompatActivity {
     private DrawerLayout drawerLayout;
@@ -41,10 +53,11 @@ public class MainActivity extends AppCompatActivity {
     private FirebaseDatabase database;
     private DatabaseReference myRefToDatabase;
 
-    private JSONObject storesJson = null;
-    //private ArrayList<Store> stores = new ArrayList<>();
+    private JSONObject ordersJson = null;
+    private ArrayList<Order> orders = new ArrayList<>();
 
-    private ListView storesList;
+    private ListView orderList;
+    private OrderAdapter orderAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,29 +67,29 @@ public class MainActivity extends AppCompatActivity {
         FirebaseInstanceId.getInstance().getToken();
         saveLocalData();
         setupToolbarAndDrawer();
-       // getAddress();
+        getAddress();
 
-       /* storeAdapter = new StoreAdapter(stores, MainActivity.this);
-        storesList = findViewById(R.id.stores_list);
-        storesList.setAdapter(storeAdapter);
+        orderAdapter = new OrderAdapter(orders, MainActivity.this);
+        orderList = findViewById(R.id.orders_list);
+        orderList.setAdapter(orderAdapter);
 
-        storesList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        orderList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> arg0, View arg1, int position, long arg3) {
-                Intent nextActivity;
+               /* Intent nextActivity;
                 nextActivity = new Intent(getBaseContext(), CategoriesActivity.class);
                 Store selectedStore = (Store) arg0.getItemAtPosition(position);
                 nextActivity.putExtra(StoreModel.SELECTED_STORE, selectedStore);
-                startActivity(nextActivity);
+                startActivity(nextActivity);*/
             }
-        });*/
+        });
 
-       // getStores();
+        getOrders();
     }
 
-    /*private void getStores() {
+    private void getOrders() {
         database = FirebaseDatabase.getInstance();
-        myRefToDatabase = database.getReference("Stores");
+        myRefToDatabase = database.getReference("Oders");
         myRefToDatabase.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -84,28 +97,19 @@ public class MainActivity extends AppCompatActivity {
                     Gson gson = new Gson();
                     String gsonString = gson.toJson(dataSnapshot.getValue());
                     try {
-                        storesJson = new JSONObject(gsonString);
-                        stores.clear();
-                        Iterator<String> iterator = storesJson.keys();
+                        ordersJson = new JSONObject(gsonString);
+                        orders.clear();
+                        Iterator<String> iterator = ordersJson.keys();
                         while (iterator.hasNext()) {
                             String key = iterator.next();
                             try {
-                                JSONObject storeJson = new JSONObject(storesJson.get(key).toString());
-                                Store store = new Store(  key,
-                                                                    storeJson.getString(StoreModel.NAME),
-                                                                    storeJson.getString(StoreModel.ADDRESS),
-                                                                    storeJson.getString(StoreModel.LOGO_URL),
-                                                                    storeJson.getString(StoreModel.LATITUDE),
-                                                                    storeJson.getString(StoreModel.LONGITUDE),
-                                                                    storeAdapter);
-                                FirebaseCommunication firebaseCommunication = new FirebaseCommunication();
-                                firebaseCommunication.getImageStore(storeJson.getString("logo_url"), store);
-                                stores.add(store);
+                                JSONObject orderJson = new JSONObject(ordersJson.get(key).toString());
+                                
                             } catch (JSONException e) {
                                 e.printStackTrace();
                             }
                         }
-                        storeAdapter.notifyDataSetChanged();
+                        orderAdapter.notifyDataSetChanged();
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
@@ -116,7 +120,7 @@ public class MainActivity extends AppCompatActivity {
             public void onCancelled(@NonNull DatabaseError databaseError) {
             }
         });
-    }*/
+    }
 
     private void getAddress(){
         LocationService locationService = LocationService.getInstance();
@@ -126,7 +130,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void saveLocalData() {
-       /* FirebaseAuth mAuth = FirebaseAuth.getInstance();
+        FirebaseAuth mAuth = FirebaseAuth.getInstance();
         FirebaseUser firebaseUser = mAuth.getCurrentUser();
         SharedPreferences sharedPreferences = getSharedPreferences("FirebaseUser", MODE_PRIVATE);
         SharedPreferences.Editor ed = sharedPreferences.edit();
@@ -134,7 +138,7 @@ public class MainActivity extends AppCompatActivity {
         ed.putString("name", firebaseUser.getDisplayName());
         ed.putString("email", firebaseUser.getEmail());
         //ed.putString("phoneNumber",  user.getPhoneNumber());
-        ed.commit();*/
+        ed.commit();
     }
 
     private void setupToolbarAndDrawer(){
