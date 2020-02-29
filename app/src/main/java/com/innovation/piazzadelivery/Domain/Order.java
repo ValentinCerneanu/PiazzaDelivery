@@ -9,6 +9,7 @@ import java.util.Calendar;
 public class Order {
 
     private String storeKey;
+    private String orderKey;
     private ArrayList<OrderItem> items = new ArrayList<>();
     private Double totalPrice;
     private String time;
@@ -33,7 +34,8 @@ public class Order {
         this.status = OrderModel.STATUS_NEPRELUATA;
     }
 
-    public Order(String userID, String storeKey, Double totalPrice, String time, String address, String status) {
+    public Order(String orderKey, String userID, String storeKey, Double totalPrice, String time, String address, String status) {
+        this.orderKey = orderKey;
         this.userID = userID;
         this.storeKey = storeKey;
         this.totalPrice = totalPrice;
@@ -82,5 +84,9 @@ public class Order {
 
     public String getStatus() {
         return status;
+    }
+
+    public String getOrderKey() {
+        return orderKey;
     }
 }
