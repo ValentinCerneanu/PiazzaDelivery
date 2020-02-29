@@ -35,6 +35,7 @@ import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.gson.Gson;
 import com.innovation.piazzadelivery.Adapters.OrderAdapter;
 import com.innovation.piazzadelivery.Domain.Order;
+import com.innovation.piazzadelivery.Domain.OrderModel;
 import com.innovation.piazzadelivery.R;
 import com.innovation.piazzadelivery.Services.LocationService;
 
@@ -104,7 +105,17 @@ public class MainActivity extends AppCompatActivity {
                             String key = iterator.next();
                             try {
                                 JSONObject orderJson = new JSONObject(ordersJson.get(key).toString());
-                                
+                                if(orderJson.getString(OrderModel.STATUS).equals(OrderModel.STATUS_NEPRELUATA)) {
+                                    Order order = new Order(key,
+                                            orderJson.getString(OrderModel.USER_ID),
+                                            orderJson.getString(OrderModel.STORE_KEY),
+                                            orderJson.getDouble(OrderModel.TOTAL_PRICE),
+                                            orderJson.getString(OrderModel.TIME),
+                                            orderJson.getString(OrderModel.ADDRESS),
+                                            orderJson.getString(OrderModel.STATUS));
+
+                                    orders.add(order);
+                                }
                             } catch (JSONException e) {
                                 e.printStackTrace();
                             }
