@@ -37,6 +37,7 @@ import com.innovation.piazzadelivery.Adapters.OrderAdapter;
 import com.innovation.piazzadelivery.Domain.Order;
 import com.innovation.piazzadelivery.Domain.OrderModel;
 import com.innovation.piazzadelivery.R;
+import com.innovation.piazzadelivery.Repository.UserRepository;
 import com.innovation.piazzadelivery.Services.LocationService;
 
 import org.json.JSONException;
@@ -90,7 +91,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void getOrders() {
         database = FirebaseDatabase.getInstance();
-        myRefToDatabase = database.getReference("Oders");
+        myRefToDatabase = database.getReference("Orders");
         myRefToDatabase.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -105,7 +106,9 @@ public class MainActivity extends AppCompatActivity {
                             String key = iterator.next();
                             try {
                                 JSONObject orderJson = new JSONObject(ordersJson.get(key).toString());
-                                if(orderJson.getString(OrderModel.STATUS).equals(OrderModel.STATUS_NEPRELUATA)) {
+                                if(orderJson.getString(OrderModel.STATUS).equals(OrderModel.STATUS_NEPRELUATA)
+                                        || orderJson.getString(OrderModel.DELIVERY_KEY).equals(UserRepository.getInstance().getFirebareUserID())) {
+
                                     Order order = new Order(key,
                                             orderJson.getString(OrderModel.USER_ID),
                                             orderJson.getString(OrderModel.STORE_KEY),

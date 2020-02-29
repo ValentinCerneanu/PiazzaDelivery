@@ -8,6 +8,9 @@ public class OrderModel {
     public static String ITEMS = "items";
     public static String TIME = "time";
     public static String TOTAL_PRICE = "totalPrice";
+    public static String DELIVERY_KEY = "deliveryKey";
 
     public static String STATUS_NEPRELUATA= "nepreluata";
+    public static String STATUS_PRELUATA= "preluata";
+
 }
