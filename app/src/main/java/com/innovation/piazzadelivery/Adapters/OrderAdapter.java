@@ -76,6 +76,8 @@ public class OrderAdapter extends ArrayAdapter<Order> implements ListAdapter {
 
         if(dataModel.getStatus().equals(OrderModel.STATUS_PRELUATA)){
             viewHolder.buttonPreia.setEnabled(false);
+        } else {
+            viewHolder.buttonPreia.setEnabled(true);
         }
 
         viewHolder.buttonPreia.setOnClickListener(new View.OnClickListener() {
