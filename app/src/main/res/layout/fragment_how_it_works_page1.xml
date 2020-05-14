@@ -11,7 +11,7 @@ android:orientation="horizontal">
         android:layout_centerInParent="true"
         android:gravity="center_horizontal"
         android:textSize="30sp"
-        android:text="Cum functioneaza?" />
+        android:text="How it works?" />
 
     <TextView
         android:layout_width="match_parent"
@@ -20,5 +20,5 @@ android:orientation="horizontal">
         android:gravity="center_horizontal"
         android:layout_margin="20dp"
         android:textSize="20sp"
-        android:text="Pune in cosul virtual produsele pe care vrei sa le cumperi de la magazinul tau preferat si un livrator iti aduce la domiciliu comanda in intervalul de timp selectat!"/>
+        android:text="Add in your shopping basket the groceries you want and a delivery boy will bring to your house the order in the selected time interval"/>
 </RelativeLayout>

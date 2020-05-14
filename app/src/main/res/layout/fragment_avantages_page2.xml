@@ -11,7 +11,7 @@
         android:layout_centerInParent="true"
         android:gravity="center_horizontal"
         android:textSize="30sp"
-        android:text="Avantaje" />
+        android:text="Advantages" />
 
     <TextView
         android:lineSpacingMultiplier="1.2"
@@ -21,5 +21,5 @@
         android:gravity="center_horizontal"
         android:layout_margin="20dp"
         android:textSize="20sp"
-        android:text="· Salvezi timp\n· Poti programa ora de livrare\n· Poti comanda pentru cei dragi\n· Poti analiza comportamentul de consum"/>
+        android:text="· Save time\n· You can schedule the delivery time\n· You can order for your loved ones\n· • You can track your finances and consumption habits"/>
 </RelativeLayout>
